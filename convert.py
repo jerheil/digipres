@@ -179,6 +179,35 @@ def add_missing_columns(input_file):
     except Exception as e:
         print(f"An error occurred while adding missing columns: {e}")
 
+def remove_filemodify_if_both_exist(input_file):
+    """If both FileCreateDate and FileModifyDate exist in the CSV header, remove the FileModifyDate column and value rows.
+
+    This rewrites the CSV in place without the FileModifyDate column.
+    """
+    try:
+        with open(input_file, 'r', newline='', encoding='utf-8') as infile:
+            reader = csv.DictReader(infile)
+            fieldnames = reader.fieldnames or []
+            rows = list(reader)
+
+        # If both are present in the header, remove FileModifyDate from header and each row
+        if 'FileCreateDate' in fieldnames and 'FileModifyDate' in fieldnames:
+            new_fieldnames = [fn for fn in fieldnames if fn != 'FileModifyDate']
+            for row in rows:
+                row.pop('FileModifyDate', None)
+
+            with open(input_file, 'w', newline='', encoding='utf-8') as outfile:
+                writer = csv.DictWriter(outfile, fieldnames=new_fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+
+            print(f"Removed 'FileModifyDate' from '{input_file}' because 'FileCreateDate' was present.")
+        else:
+            # Nothing to do
+            print(f"No action: 'FileCreateDate' and 'FileModifyDate' not both present in '{input_file}'.")
+    except Exception as e:
+        print(f"An error occurred while removing FileModifyDate: {e}")
+
 def process_csv(input_file, output_file):
     try:
         with open(input_file, 'r', newline='', encoding='utf-8') as infile:
@@ -307,6 +336,9 @@ if __name__ == "__main__":
 
     # Add missing columns if necessary
     add_missing_columns(input_csv)
+
+    # If both FileCreateDate and FileModifyDate exist in the exported CSV, prefer FileCreateDate and remove FileModifyDate
+    remove_filemodify_if_both_exist(input_csv)
 
     process_csv(input_csv, output_csv)
 
