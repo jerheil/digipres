@@ -46,7 +46,7 @@ def run_exiftool_and_create_metadataexp(dest_folder, source_folder, output_name=
     args = [
         exiftool,
         "-csv", "-r",
-        "-SourceFile", "-Title", "-FileName", "-FileCreateDate", "-PageCount",
+        "-SourceFile", "-Title", "-FileName", "-FileCreateDate", "-FileModifyDate", "-PageCount",
         "-FileTypeExtension", "-MIMEType", "-LayerCount",
         "*"
     ]
@@ -113,7 +113,7 @@ def process_layer_count(layer_count, extension, title, filename):
         label = ""
 
     if extension:
-        return f"Item is a {extension} file relating to {label}" if label else f"Item is a ({extension}) file."
+        return f"Item is a {extension} file relating to {label}" if label else f"Item is a {extension} file."
     else:
         return f"Item is a file relating to {label}" if label else "Item is a file."
 
