@@ -40,14 +40,14 @@ Create a folder on your computer (Desktop or wherever). Save the [convert.py](ht
 
 Bags for Archivematica are structured as:
 
-Bagname
+![Bagname
 |---data
     |---metadata
         |---metadata.csv
         |---rights.csv
     |---objects
         |---digitalobject1
-        |---digitalobject2 ...
+        |---digitalobject2 ...](./bagStructure.png)
 
 While these scripts can be run on any folder, it is recommended that you prepare the folder structure in advance, with BagnameFolder containing a metadata folder and an objects folder.
 
